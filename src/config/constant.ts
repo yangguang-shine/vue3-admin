@@ -1,0 +1,1 @@
+export const baseServerUrl = `${window.location.origin}/api`

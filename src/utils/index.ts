@@ -10,6 +10,13 @@ export const rootUrl = window.location.href.substring(
   window.location.href.indexOf(prePath) + 1
 );
 
+export function delayAsync(time: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, time);
+  })
+}
 
 
 

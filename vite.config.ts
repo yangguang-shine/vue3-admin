@@ -32,10 +32,10 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         resolvers: [ElementPlusResolver()],
       }),
       ElementPlus(),
-      eslintPlugin({
-        include: ["src/**/*.ts", "src/*.ts", "src/**/*.vue", "src/*.vue", "src/**/*.js", "src/*.js"],
-        cache: true,
-      }),
+      // eslintPlugin({
+      //   include: ["src/**/*.ts", "src/*.ts", "src/**/*.vue", "src/*.vue", "src/**/*.js", "src/*.js"],
+      //   cache: true,
+      // }),
       createHtmlPlugin({
         minify: true,
         entry: "src/main.ts",
@@ -47,18 +47,18 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     ],
   };
   if (command === "serve") {
-    config.plugins && config.plugins.push(checker({ vueTsc: true, overlay: false }));
+    // config.plugins && config.plugins.push(checker({ vueTsc: true, overlay: false }));
     return {
       ...config,
       server: {
         host: "127.0.0.1",
-        port: 8899,
+        port: 9000,
         // open: "index.html",
         proxy: {
           "/api": {
-            target: "http://172.29.1.147:98",
+            target: "http://hx.com:9999",
             changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/api/, ""),
+            // rewrite: (path) => path.replace(/^\/api/, ""),
           },
         },
       },

@@ -1,4 +1,7 @@
+export * from './menu'
+
 export type PositionCssI = 'absolute' | 'relative' | 'fixed'
+
 export interface PositionI {
   width: number,
   height: number,
