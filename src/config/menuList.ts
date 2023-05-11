@@ -19,6 +19,11 @@ export const menuList: MenuItemI[] = [
         icon: List,
       },
       {
+        title: "店铺菜品",
+        name: "shop/menu",
+        icon: List,
+      },
+      {
         title: "店铺统计",
         name: "shop/statistics",
         icon: Handbag,

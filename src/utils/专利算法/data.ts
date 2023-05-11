@@ -5,7 +5,7 @@ export interface ItemI  {
 }
 export type QueueItemI  = {
   type: TypeI,
-  count: number
+  order: number
 } & ItemI;
 export const A: ItemI = {
   finish: 10,

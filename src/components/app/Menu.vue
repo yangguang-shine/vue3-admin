@@ -36,46 +36,37 @@ import { useRoute, useRouter } from "vue-router";
 import { useGlobalStore } from "@/store";
 const { setSinglePageFlag } = useGlobalStore();
 const nameList: string[] = getNameList();
-
 const router = useRouter();
 const route = useRoute();
-console.log(route.path);
-console.log(route.path === '/');
-if (route.path === '/') {
-  router.replace({
-    name: 'home'
-  })
-}
-console.log("router");
-console.log(router);
-console.log(route);
-const defaultActive = ref("");
+const defaultActive = ref("home");
 const isCollapse = ref(false);
-const handleOpen = () => {
+getCurrentActive();
+watch(route, () => {
+  console.log('router change');
+  getCurrentActive();
+});
+function handleOpen() {
   console.log("handleOpen");
-};
-const handleClose = () => {
+}
+function handleClose() {
   console.log("handleClose");
-};
-const handleSelect = (name: string) => {
+}
+function handleSelect(name: string) {
   console.log(name);
   router.push({
     name,
   });
-};
-watch(route, (routeInfo) => {
-  const name = routeInfo.path.slice(1) || "home";
-  console.log("route");
-  console.log(name);
+}
+function getCurrentActive() {
+  const name = route.path.slice(1) || "home";
   defaultActive.value = name;
-  console.log(nameList);
-  if (nameList.find(item => item.startsWith(name))) {
-    console.log(nameList.find(item => item.startsWith(name)));
+  if (nameList.find((item) => name.startsWith(item))) {
     router.push({
       name,
     });
   }
-});
+}
+
 function getNameList() {
   const nameList: string[] = [];
   menuList.forEach((item) => {

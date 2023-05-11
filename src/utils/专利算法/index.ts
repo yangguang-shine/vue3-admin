@@ -2,31 +2,37 @@ import { TypeI, ItemI, QueueItemI, A, B, C, D, E } from "./data";
 let queueList: QueueItemI[][] = [[], [], [], [], []];
 let time = 0;
 export function getTwoMinTime() {
-  // const typeList: TypeI[] = ["D", "D", "B", "C", "E", "A", "D", "B", "C", "A"];
-  // const typeList: TypeI[] = ["A", "D", "D", "E", "E"];
-  const typeList: TypeI[] = getRandomList(20);
+  queueList = [[], [], [], [], []];
+  time = 0;
 
+  let typeList: TypeI[] = getRandomList({
+    customCount: 5,
+    customerTypeNum: 5,
+  });
+  typeList = ['B', 'A', 'D', 'C','E']
+  console.log(typeList);
   formatTypeList(typeList);
-  queueList.forEach(item => {
+  queueList.forEach((item) => {
     console.table(item);
-  })
+  });
   if (!queueList.length) {
-    console.log(time);
     return;
   }
   readyStart();
   console.log(time);
 }
-function getRandomList(length: number): TypeI[] {
+function getRandomList(config: { customCount: number; customerTypeNum: number }): TypeI[] {
+  const { customCount, customerTypeNum } = config;
+  const ravage: number = 1 / customerTypeNum;
   const list: TypeI[] = [];
-  for (let i = 0; i < length; i++) {
-    if (0 < Math.random() && Math.random() <= 0.2) {
+  for (let i = 0; i < customCount; i++) {
+    if (0 < Math.random() && Math.random() <= ravage) {
       list.push("A");
-    } else if (0.2 < Math.random() && Math.random() <= 0.4) {
+    } else if (ravage < Math.random() && Math.random() <= ravage * 2) {
       list.push("B");
-    } else if (0.4 < Math.random() && Math.random() <= 0.6) {
+    } else if (ravage * 2 < Math.random() && Math.random() <= ravage * 3) {
       list.push("C");
-    } else if (0.6 < Math.random() && Math.random() <= 0.6) {
+    } else if (ravage * 3 < Math.random() && Math.random() <= ravage * 4) {
       list.push("D");
     } else {
       list.push("E");
@@ -36,19 +42,17 @@ function getRandomList(length: number): TypeI[] {
 }
 function readyStart() {
   // const endFlag: boolean =  false
-  let min = queueList[0][0].count;
+  let min = queueList[0][0].order;
   let minIndex = 0;
   queueList.find((item, index) => {
-    if (item[0].count < min) {
-      min = item[0].count;
+    if (item[0].order < min) {
+      min = item[0].order;
       minIndex = index;
     }
   });
   const readyStartItem = queueList[minIndex].shift();
   filterQueueList();
   if (readyStartItem) {
-    console.log('readyStart')
-    console.log(readyStartItem)
     time += readyStartItem.finish;
     toStart(readyStartItem.free);
   }
@@ -64,7 +68,7 @@ function toStart(remainFree: number) {
       if (!canParallelItem) {
         canParallelItem = item[0];
         canParallelIndex = index;
-      } else if (canParallelItem.count > item[0].count) {
+      } else if (canParallelItem.order > item[0].order) {
         canParallelItem = item[0];
         canParallelIndex = index;
       }
@@ -74,51 +78,49 @@ function toStart(remainFree: number) {
     const canParallelItem = queueList[canParallelIndex].shift();
     filterQueueList();
     if (canParallelItem) {
-      console.log(canParallelItem)
       toStart(canParallelItem.free);
-      remainFree = remainFree - canParallelItem.finish
+      remainFree = remainFree - canParallelItem.finish;
       if (remainFree > 0) {
         toStart(remainFree);
       }
-
     }
   }
 }
 function formatTypeList(typeList: TypeI[]) {
-  let count = 1;
+  let order = 1;
   typeList.forEach((item) => {
     if (item === "A") {
       queueList[0].push({
         type: "A",
-        count,
+        order,
         ...A,
       });
     } else if (item === "B") {
       queueList[1].push({
         type: "B",
-        count,
+        order,
         ...B,
       });
     } else if (item === "C") {
       queueList[2].push({
         type: "C",
-        count,
+        order,
         ...C,
       });
     } else if (item === "D") {
       queueList[3].push({
         type: "D",
-        count,
+        order,
         ...D,
       });
     } else if (item === "E") {
       queueList[4].push({
         type: "E",
-        count,
+        order,
         ...E,
       });
     }
-    count++;
+    order++;
   });
   filterQueueList();
   console.log(JSON.parse(JSON.stringify(queueList)));
