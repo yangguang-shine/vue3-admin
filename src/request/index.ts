@@ -1,4 +1,5 @@
 import shop from './shop'
-export default {
+const API = {
   shop
 }
+export default API
