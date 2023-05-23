@@ -1,4 +1,4 @@
-export * from './menu'
+export * from './nav'
 export * from './shop'
 
 export interface ObjectI<T = any> {

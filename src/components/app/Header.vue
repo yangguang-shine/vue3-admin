@@ -2,7 +2,7 @@
   <div class="header flex-row flex-a-center flex-j-between">
     <div class="produce-name-box flex-center">综治管理中心</div>
     <div class="nav-box flex-item flex-row">
-      <div class="nav-item flex-col flex-a-center" :class="navItem.isActive ? 'nav-item-active' : ''" v-for="(navItem, index) in navList" :key="index">
+      <div class="nav-item flex-col flex-a-center cursor-pointer" :class="navItem.isActive ? 'nav-item-active' : ''" v-for="(navItem, index) in navList" :key="index">
         <el-image class="nav-img" :src="navItem.isActive ? navItem.iconActive : navItem.icon"></el-image>
         <div class="nav-name">{{ navItem.navName }}</div>
       </div>
@@ -12,14 +12,6 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-export interface NavItemI {
-  navName: string;
-  icon: string;
-  iconActive: string;
-  isActive: boolean;
-}
-</script>
 
 <script lang="ts" setup>
 import fetch from "@/request";
@@ -27,24 +19,7 @@ import { SwitchButton } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { confirm } from "@/utils";
 import router from "@/router";
-import peopleImg from "@/image/nav/people.png";
-import peopleImgActive from "@/image/nav/people_active.png";
-import buildingImg from "@/image/nav/building.png";
-import buildingImgActive from "@/image/nav/building_active.png";
-const navList: NavItemI[] = [
-  {
-    navName: "人口管理",
-    icon: peopleImg,
-    iconActive: peopleImgActive,
-    isActive: false,
-  },
-  {
-    navName: "房屋管理",
-    icon: buildingImg,
-    iconActive: buildingImgActive,
-    isActive: true,
-  },
-];
+import { navList } from "@/config/nav";
 async function logout() {
   await confirm({
     message: "确认注销吗",
@@ -71,8 +46,8 @@ async function logout() {
   font-size: 14px;
   color: #fff;
   .produce-name-box {
-    width: 200px;
     height: 100%;
+  width: 250px;
     font-size: 20px;
   }
   .nav-box {

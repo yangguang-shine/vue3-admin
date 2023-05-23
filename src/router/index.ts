@@ -1,8 +1,10 @@
-import { RouterItemI } from '@/interface/menu';
-import { menuRouter } from '@/config/menu/menuRouter';
+import { MenuItemI } from '@/interface';
+import { navList } from '@/config/nav/index';
+import { DeepChildrenI, MenuChildrenI, NavItemI } from '@/interface/nav';
+import { menuRouter } from '@/config/nav/menuRouter';
 import { createRouter, createWebHashHistory } from "vue-router";
 import Index from "@/pages/index/index.vue";
-import deepRouter from '@/config/menu/deepRouter';
+import deepRouter from '@/config/nav/deepRouter';
 const modules = import.meta.glob('@/pages/index/**/*.vue')
 console.log("modules");
 console.log(modules);
@@ -11,10 +13,13 @@ interface RouterConfigItemI {
   path: string
   component:any
 }
-function getRouterInfo(item: RouterItemI) {
+function getRouterInfo(item: MenuChildrenI | DeepChildrenI ) {
   const path = `/${item.name}`
-  const modulePath = `/src/pages/index/${item.name}/index.vue`
+  const modulePath = `/src/pages/index/${item.name}.vue`
+  console.log("modulePath");
+  console.log(modulePath);
   const component = modules[modulePath]
+  console.log(component);
 
   return {
     path,
@@ -22,45 +27,29 @@ function getRouterInfo(item: RouterItemI) {
     component,
   }
 }
-
-const menuRouterList: RouterConfigItemI[] = [];
-menuRouter.forEach(item => {
-  if (item.children) {
-    item.children.forEach(child => {
-      const routerInfo =getRouterInfo(child)
-      menuRouterList.push(routerInfo)
+const routerList: RouterConfigItemI[] = []
+navList.forEach(navItem => {
+  navItem.menuList.forEach((menuItem: MenuItemI) => {
+    menuItem.children.forEach(childItem => {
+    routerList.push(getRouterInfo(childItem))
+      if (childItem.deepChildren) {
+        childItem.deepChildren.forEach(deepChildrenItem => {
+          routerList.push(getRouterInfo(deepChildrenItem))
+        })
+      }
     })
-  } else {
-    const routerInfo =getRouterInfo(item)
-    menuRouterList.push(routerInfo)
-  }
+  })
 })
+console.log("routerList");
+console.log(routerList);
 
-const deepRouterList: RouterConfigItemI[] = []
-deepRouter.forEach(item => {
-  if (item.children) {
-    item.children.forEach(child => {
-      const routerInfo =getRouterInfo(child)
-      deepRouterList.push(routerInfo)
-    })
-  } else {
-    const routerInfo =getRouterInfo(item)
-    deepRouterList.push(routerInfo)
-  }
-})
-console.log("deepRouterList");
-console.log(deepRouterList);
 const routes = [
   {
     path: "/",
     name: "index",
     component: Index,
     children: [
-      ...menuRouterList, 
-      ...deepRouterList
-      // second page
-      // { path: "/shop/list/detail", name: "shop/list/detail", component: () => import("@/pages/index/shop/list/detail/index.vue") },
-
+      ...routerList
     ],
   },
   { path: "/login", name: "login", component: () => import("@/pages/login/index.vue") },

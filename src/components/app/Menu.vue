@@ -2,29 +2,12 @@
   <el-menu active-text-color="#ffd04b" background-color="#545c64" text-color="#fff" :default-active="defaultActive" class="el-menu-box" :collapse="isCollapse" @open="handleOpen" @close="handleClose" @select="handleSelect">
     <template v-for="menuItem in menuList" :key="menuItem.name">
       <el-sub-menu v-if="menuItem.children && menuItem.children.length" :index="menuItem.name">
-        <template #title>
-          <el-icon>
-            <component :is="menuItem.icon"></component>
-          </el-icon>
-          <span>{{ menuItem.title }}</span>
-        </template>
         <el-menu-item v-for="subMenuItem in menuItem.children" :key="subMenuItem.name" :index="subMenuItem.name">
           <template #title>
-            <el-icon>
-              <component :is="subMenuItem.icon"></component>
-            </el-icon>
             <span>{{ subMenuItem.title }}</span>
           </template>
         </el-menu-item>
       </el-sub-menu>
-      <el-menu-item v-else :index="menuItem.name" :key="menuItem.name">
-        <template #title>
-          <el-icon>
-            <component :is="menuItem.icon"></component>
-          </el-icon>
-          <span>{{ menuItem.title }}</span>
-        </template>
-      </el-menu-item>
     </template>
   </el-menu>
 </template>
@@ -34,7 +17,6 @@ import { ref, watch } from "vue";
 import { menuList } from "@/config";
 import { useRoute, useRouter } from "vue-router";
 import { useGlobalStore } from "@/store";
-const { setSinglePageFlag } = useGlobalStore();
 const nameList: string[] = getNameList();
 const router = useRouter();
 const route = useRoute();
@@ -58,13 +40,19 @@ function handleSelect(name: string) {
   });
 }
 function getCurrentActive() {
-  const name = route.path.slice(1) || "home";
-  defaultActive.value = name;
-  if (nameList.find((item) => name.startsWith(item))) {
-    router.push({
-      name,
-    });
-  }
+  const name = route.path.slice(1);
+  console.log("name");
+  console.log(name);
+  
+  // if (!name) {
+
+  // }
+  // defaultActive.value = name;
+  // if (nameList.find((item) => name.startsWith(item))) {
+  //   router.push({
+  //     name,
+  //   });
+  // }
 }
 
 function getNameList() {

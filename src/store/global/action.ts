@@ -1,10 +1,10 @@
 // import { popWindowConfigList } from './../../config/pop';
 import globalState from "./state";
-function setSinglePageFlag(singlePageFlag: boolean) {
-  globalState.singlePageFlag = singlePageFlag
+function setNavNameActive(navNameActive: string) {
+  globalState.navNameActive = navNameActive
 }
 
 const action = {
-  setSinglePageFlag,
+  setNavNameActive,
 };
 export default action;

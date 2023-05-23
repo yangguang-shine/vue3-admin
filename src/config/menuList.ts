@@ -1,6 +1,6 @@
 import { MenuItemI } from "@/interface";
 import iconInfo from '@/config/iconInfo'
-import menuRouter from '@/config/menu/menuRouter'
+import menuRouter from '@/config/nav/menuRouter'
 export const menuList: MenuItemI[] = []
 menuRouter.forEach(item => {
   if (item.children) {
