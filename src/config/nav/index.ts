@@ -3,7 +3,7 @@ import { NavItemI } from '@/interface/nav';
 import people from "./people";
 import house from "./house";
 export const navList: NavItemI[] = [people, house];
-const pathInfo: ObjectI = {}
+export const pathInfo: ObjectI = {}
 navList.forEach(navItem => {
     navItem.menuList.forEach(menuItem => {
         menuItem.children.forEach(childItem => {

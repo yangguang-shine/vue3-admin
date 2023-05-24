@@ -2,9 +2,9 @@
   <div class="header flex-row flex-a-center flex-j-between">
     <div class="produce-name-box flex-center">综治管理中心</div>
     <div class="nav-box flex-item flex-row">
-      <div class="nav-item flex-col flex-a-center cursor-pointer" :class="navItem.isActive ? 'nav-item-active' : ''" v-for="(navItem, index) in navList" :key="index">
-        <el-image class="nav-img" :src="navItem.isActive ? navItem.iconActive : navItem.icon"></el-image>
-        <div class="nav-name">{{ navItem.navName }}</div>
+      <div class="nav-item flex-col flex-a-center cursor-pointer" :class="moduleNameActive === navItem.moduleName ? 'nav-item-active' : ''" v-for="(navItem, index) in navList" :key="index" @click="changeNav(navItem)">
+        <el-image class="nav-img" :src="moduleNameActive === navItem.moduleName ? navItem.iconActive : navItem.icon"></el-image>
+        <div class="nav-name">{{ navItem.navTitle }}</div>
       </div>
     </div>
     <div class="user-info-box">
@@ -18,8 +18,14 @@ import fetch from "@/request";
 import { SwitchButton } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { confirm } from "@/utils";
-import router from "@/router";
 import { navList } from "@/config/nav";
+import { useGlobalStore } from "@/store";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { NavItemI } from "@/interface";
+const globalStore = useGlobalStore()
+const { moduleNameActive  } = storeToRefs(globalStore)
+const router = useRouter()
 async function logout() {
   await confirm({
     message: "确认注销吗",
@@ -30,6 +36,19 @@ async function logout() {
     name: "login",
   });
 }
+// 切换模块时，跳转该模块的第一个菜单
+function changeNav(navItem: NavItemI) {
+  try {
+    const name = navItem.menuList[0].children[0].name
+    router.push({
+      name
+    })
+  } catch (e) {
+    console.error(e);
+  }
+
+}
+
 </script>
 <style lang="less">
 .el-header {

@@ -2,10 +2,9 @@ import { NavItemI } from '../../interface/nav';
 import peopleImg from "@/image/nav/people.png";
 import peopleImgActive from "@/image/nav/people_active.png";
 export const peopleMenu: NavItemI = {
-  navName: "人口管理",
+  navTitle: "人口管理",
   icon: peopleImg,
   iconActive: peopleImgActive,
-  isActive: false,
   moduleName: "people",
   menuList: [
     {

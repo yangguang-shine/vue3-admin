@@ -1,7 +1,10 @@
 <template>
-  <el-menu active-text-color="#ffd04b" background-color="#545c64" text-color="#fff" :default-active="defaultActive" class="el-menu-box" :collapse="isCollapse" @open="handleOpen" @close="handleClose" @select="handleSelect">
+  <el-menu active-text-color="#ffd04b" unique-opened background-color="#545c64" text-color="#fff" :default-active="defaultActive" class="el-menu-box" :collapse="isCollapse" @open="handleOpen" @close="handleClose" @select="handleSelect">
     <template v-for="menuItem in menuList" :key="menuItem.name">
       <el-sub-menu v-if="menuItem.children && menuItem.children.length" :index="menuItem.name">
+        <template #title>
+            <span>{{ menuItem.title }}</span>
+          </template>
         <el-menu-item v-for="subMenuItem in menuItem.children" :key="subMenuItem.name" :index="subMenuItem.name">
           <template #title>
             <span>{{ subMenuItem.title }}</span>
@@ -14,18 +17,25 @@
 
 <script lang="ts" setup>
 import { ref, watch } from "vue";
-import { menuList } from "@/config";
 import { useRoute, useRouter } from "vue-router";
 import { useGlobalStore } from "@/store";
-const nameList: string[] = getNameList();
+import { storeToRefs } from "pinia";
+import {pathInfo} from '@/config/nav'
+// import { useGlobalStore } from "@/store";
+const globalStore = useGlobalStore()
+const { menuList }  = storeToRefs(globalStore) 
+const {setModuleNameActive, setMenuList} = globalStore
 const router = useRouter();
 const route = useRoute();
-const defaultActive = ref("home");
+const defaultActive = ref("");
 const isCollapse = ref(false);
 getCurrentActive();
 watch(route, () => {
   console.log('router change');
   getCurrentActive();
+});
+watch(menuList, () => {
+  console.log('menuList change');
 });
 function handleOpen() {
   console.log("handleOpen");
@@ -40,13 +50,22 @@ function handleSelect(name: string) {
   });
 }
 function getCurrentActive() {
-  const name = route.path.slice(1);
+  const path = route.path
+  const name = pathInfo[path]
   console.log("name");
   console.log(name);
-  
-  // if (!name) {
+  if (!name) {
+    router.replace({
+      name: 'people/overview/peopleOverview'
+    })
+    return
+  } else {
+    const moduleName = name.split('/')[0]
+    setModuleNameActive(moduleName)
+    setMenuList()
+    setDefaultActive(name)
+  }
 
-  // }
   // defaultActive.value = name;
   // if (nameList.find((item) => name.startsWith(item))) {
   //   router.push({
@@ -54,19 +73,8 @@ function getCurrentActive() {
   //   });
   // }
 }
-
-function getNameList() {
-  const nameList: string[] = [];
-  menuList.forEach((item) => {
-    if (item.children && item.children.length) {
-      item.children.forEach((childItem) => {
-        nameList.push(childItem.name);
-      });
-    } else {
-      nameList.push(item.name);
-    }
-  });
-  return nameList;
+function setDefaultActive(name: string) {
+  defaultActive.value = name
 }
 </script>
 

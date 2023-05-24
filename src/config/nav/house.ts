@@ -2,7 +2,7 @@ import { NavItemI } from '@/interface/nav';
 import houseImg from "@/image/nav/house.png";
 import houseImgActive from "@/image/nav/house_active.png";
 export const houseMenu: NavItemI = {
-  navName: "房屋管理",
+  navTitle: "房屋管理",
   icon: houseImg,
   iconActive: houseImgActive,
   isActive: false,

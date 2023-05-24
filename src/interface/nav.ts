@@ -14,10 +14,9 @@ export interface DeepChildrenI {
 }
 
 export interface NavItemI {
-  navName: string;
+  navTitle: string;
   icon: string;
   iconActive: string;
-  isActive: boolean;
   moduleName: string;
   menuList: MenuItemI[];
 }

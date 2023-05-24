@@ -1,13 +1,16 @@
+import { MenuItemI } from '@/interface';
 
 import { reactive } from "vue";
 export interface WindowStateI {
-  navNameActive: string
+  moduleNameActive: string
+  menuList: MenuItemI[]
 }
 // export type ShopStateG = {
 //     [T in keyof ShopStateI]: RefI<ShopStateI[T]>
 // }
 const windowState = reactive<WindowStateI>({
-  navNameActive: ''
+  moduleNameActive: '',
+  menuList: []
 })
 
 export default windowState;
