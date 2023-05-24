@@ -44,12 +44,14 @@ const routes = [
     component: Index,
     children: [
       ...routerList,
+  { path: "/:pathMatch(.*)*", name: "notFound", component: () => import("@/pages/404/index.vue") }
     ],
   },
   { path: "/login", name: "login", component: () => import("@/pages/login/index.vue") },
   { path: "/register", name: "register", component: () => import("@/pages/register/index.vue") },
-  { path: "/404", name: "notFound", component: () => import("@/pages/404/index.vue") },
-  { path: "/people", name: "notFound", component: () => import("@/pages/404/index.vue") }
+  // { path: "/404", name: "notFound", component: () => import("@/pages/404/index.vue") },
+  // { path: "/:pathMatch(.*)*", name: "notFound", component: () => import("@/pages/404/index.vue") }
+
 ];
 const router = createRouter({
   // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
